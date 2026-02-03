@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Instagram - Annu</title>
+    <style>
+        :root {
+            --ig-bg: #000;
+            --ig-text: #fff;
+            --story-gradient: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+        }
+
+        body {
+            margin: 0;
+            background-color: #121212;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--ig-text);
+            display: flex;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background: var(--ig-bg);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* --- HEADER --- */
+        .header {
+            padding: 10px 15px;
+            padding-top: calc(10px + env(safe-area-inset-top));
+            display: flex;
+            align-items: center;
+            border-bottom: 0.5px solid #262626;
+        }
+
+        .dp-container {
+            position: relative;
+            width: 45px;
+            height: 45px;
+            margin-right: 12px;
+        }
+
+        .story-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--story-gradient);
+            border-radius: 50%;
+            padding: 2px;
+        }
+
+        .dp-inner {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            border-radius: 50%;
+            padding: 2px;
+        }
+
+        .dp-image {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* --- CHAT --- */
+        .chat-area {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .bubble {
+            max-width: 75%;
+            padding: 12px 16px;
+            border-radius: 22px;
+            font-size: 14px;
+            line-height: 1.4;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .bubble.them { background: #262626; align-self: flex-start; }
+        .bubble.me { background: #3797f0; align-self: flex-end; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } }
+
+        /* --- TAP INDICATORS & BUTTONS --- */
+        .footer {
+            padding: 20px;
+            padding-bottom: calc(20px + env(safe-area-inset-bottom));
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-align: center;
+        }
+
+        .tap-hint {
+            font-size: 12px;
+            color: #a8a8a8;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: pulseText 1.5s infinite;
+        }
+
+        @keyframes pulseText { 
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; color: #3797f0; }
+        }
+
+        .btn {
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-blue { background: #0095f6; color: #fff; }
+        .btn-outline { background: transparent; color: #fff; border: 1px solid #363636; }
+
+        /* The "Tap Me" Pulse Effect */
+        .pulse-effect {
+            animation: shadowPulse 2s infinite;
+        }
+
+        @keyframes shadowPulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 149, 246, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 149, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 149, 246, 0); }
+        }
+
+        .btn:active { transform: scale(0.95); }
+
+        /* --- MODAL --- */
+        #modal {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            padding: 30px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .letter-card {
+            background: #1c1c1c;
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid #333;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div style="font-size: 24px; margin-right: 15px;">←</div>
+        <div class="dp-container">
+            <div class="story-ring"><div class="dp-inner">
+                <img src="annuuu.jpeg" class="dp-image">
+            </div></div>
+        </div>
+        <div class="user-meta">
+            <b style="font-size:14px">Annu</b>
+            <span style="font-size:12px; color:#a8a8a8; display:block">Active now</span>
+        </div>
+    </div>
+
+    <div class="chat-area" id="chat">
+        <div class="bubble them">Bhai, look at the buttons below... tap one! 👇</div>
+    </div>
+
+    <div id="modal">
+        <div class="letter-card">
+            <h3 style="color: #bc1888; margin-top:0">Bhai Sun... 🥺</h3>
+            <p id="letter-p" style="line-height:1.6; color:#efefef"></p>
+            <button class="btn btn-blue" style="width:100%" onclick="closeMod()">Done</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="tap-hint">👇 Tap a button to respond</div>
+        <button class="btn btn-blue pulse-effect" onclick="sendMsg('Good Morning Annu! ☀️☕')">☀️ Good Morning</button>
+        <button class="btn btn-outline" onclick="openMod()">🥺 The "Bhai" Message</button>
+    </div>
+</div>
+
+<script>
+    function sendMsg(text) {
+        const chat = document.getElementById('chat');
+        chat.innerHTML += `<div class="bubble me">${text}</div>`;
+        chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' });
+        // Remove pulse after first tap
+        document.querySelector('.pulse-effect').classList.remove('pulse-effect');
+    }
+
+    function openMod() {
+        const msg = "Bhai... kaise hai tu? Kuch pata nahi lag raha hai yaar. Main manane jata hu toh sab ulta hi ho jata hai! Tune bola tha shaant rehne ko, main reh bhi raha hu, but abhi sab heavy ho raha hai. Maan ja ab! ";
+        document.getElementById('letter-p').innerText = msg;
+        document.getElementById('modal').style.display = 'flex';
+    }
+
+    function closeMod() {
+        document.getElementById('modal').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
